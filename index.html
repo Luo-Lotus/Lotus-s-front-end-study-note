@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+</head>
+<script src="./src/vue.ts"></script>
+<script src="./src/virtualDom.ts" type="module"></script>
+
+<body>
+    <div id="app">
+        这是没有子节点的旧节点
+        <div @click="c">{{msg1}}</div>
+        <div @click="handleClick">{{msg}}</div>
+        <input type="text" v-model="model"> {{model}}
+    </div>
+    <button id="patch">patch</button>
+</body>
+
+<script>
+    const vm = new Vue({
+        el: "#app",
+        data() {
+            return {
+                msg: "哈哈哈",
+                msg1: "哈哈哈啊啊啊啊",
+                model: "双向绑定"
+            }
+        },
+        methods: {
+            handleClick() {
+                this.msg = "改了"
+                console.log(this);
+            },
+            c() {
+                console.log("哈哈");
+            }
+        },
+        computed: {
+
+        },
+        mounted() {
+
+        }
+    })
+</script>
+
+</html>
