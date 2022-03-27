@@ -10,6 +10,8 @@
 <script src="./src/vue.ts"></script>
 <script src="./src/virtualDom.ts" type="module"></script>
 <script src="./src/MyPromise.ts" type="module"></script>
+<script src="./src/ThrottleDebounce.ts" type="module"></script>
+<script src="./src/Px2Rpx.ts" type="module"></script>
 
 <body>
     <div id="app">
@@ -19,11 +21,25 @@
         <input type="text" v-model="model"> {{model}}
     </div>
     <button id="patch">patch</button>
+    <div id="app2">
+        这是没有子节点的旧节点
+        <div @click="c">{{msg1}}</div>
+        <div @click="handleClick">{{msg}}</div>
+        <input type="text" v-model="model"> {{model}}
+    </div>
+    <button id="debounced">防抖测试</button>
+    <button id="throttle">节流测试</button>
+    <div class="rem">rem测试</div>
 </body>
-
+<style>
+    .rem {
+        color: red;
+        font-size: 50rem;
+    }
+</style>
 <script>
     const vm = new Vue({
-        el: "#app",
+        el: "#app2",
         data() {
             return {
                 msg: "哈哈哈",
@@ -32,9 +48,9 @@
             }
         },
         methods: {
-            handleClick() {
+            handleClick(event) {
                 this.msg = "改了"
-                console.log(this);
+                console.log(this.msg);
             },
             c() {
                 console.log("哈哈");

@@ -101,12 +101,12 @@ x 是对象或者函数（包括promise），let then = x.then
           // 就让then执行 第一个参数是this   后面是成功的回调 和 失败的回调
           then.call(
             x,
-            (y: any) => {
+            (value: any) => {
               // 成功和失败只能调用一个
               if (called) return;
               called = true;
               // resolve的结果依旧是promise 那就继续解析
-              this.resolvePromise(promise2, y, resolve, reject);
+              this.resolvePromise(promise2, value, resolve, reject);
             },
             (err: any) => {
               // 成功和失败只能调用一个
@@ -142,4 +142,45 @@ p.then((value) => {
   return "第二个promise";
 }).then((value) => {
   console.log(value);
+});
+
+//封装xhr
+const myAxios = (
+  url: string,
+  method: string,
+  header?: Object,
+  data?: Object
+) => {
+  return new MyPromise((res, rej) => {
+    const xhr = new XMLHttpRequest();
+    if (header != undefined) {
+      for (const i in Object.keys(header)) {
+        xhr.setRequestHeader(i, header[i]);
+      }
+    }
+    xhr.responseType = "text";
+    xhr.open(method, url, true);
+    const body = xhr.response;
+    const state = xhr.readyState;
+    xhr.onload = function (e) {
+      if (this.status == 200 || this.status == 304) {
+        res(JSON.parse(this.responseText));
+      }
+    };
+    xhr.ontimeout = function (e) {
+      rej(e);
+    };
+    xhr.onerror = function (e) {
+      rej(e);
+    };
+
+    //发送数据
+    xhr.send(JSON.stringify(data || ""));
+  });
+};
+myAxios(
+  "https://nanotus.cn/lotusapi/article/getdList?username=Lotus",
+  "GET"
+).then((x) => {
+  console.log(x);
 });
